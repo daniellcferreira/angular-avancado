@@ -1,0 +1,25 @@
+<div class="container">
+  @for(book of booksList; track book._id) {
+  <mat-card class="book-card">
+    <mat-card-header>
+      <mat-card-title
+        ><a [routerLink]="getBookUpdateRoute(book)">{{
+          book.title
+        }}</a></mat-card-title
+      >
+      <mat-card-subtitle>{{ book.author }}</mat-card-subtitle>
+    </mat-card-header>
+    <img
+      mat-card-image
+      class="book-image"
+      src="{{ book.imageLink }}"
+      alt="Photo of a book"
+    />
+    <mat-card-content>
+      <p>{{ book.description }}</p>
+    </mat-card-content>
+  </mat-card>
+  } @empty {
+  <p>No books found.</p>
+  }
+</div>

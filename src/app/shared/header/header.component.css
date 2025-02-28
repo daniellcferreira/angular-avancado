@@ -1,0 +1,27 @@
+.header-space {
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  background-color: #eeeeee;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.header-space span {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+mat-toolbar a {
+  font-weight: bold;
+  font-size: 18px;
+  color: #333;
+  margin-right: 20px;
+}

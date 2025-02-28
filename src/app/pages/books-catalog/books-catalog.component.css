@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 70px;
+  padding: 20px;
+}
+
+.book-card {
+  max-width: 300px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  text-align: left;
+  padding: 16px;
+}
+
+.book-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+mat-card-title a {
+  font-size: 22px;
+  font-weight: bold;
+  color: #2c2c6c;
+  text-decoration: underline;
+  display: block;
+  margin-bottom: 4px;
+}
+
+mat-card-subtitle {
+  font-size: 16px;
+  color: gray;
+  display: block;
+  margin-bottom: 10px;
+}
+
+mat-card-content p {
+  font-size: 16px;
+  color: #444;
+  text-align: justify;
+  margin-top: 10px;
+}
