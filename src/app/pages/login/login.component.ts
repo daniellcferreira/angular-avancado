@@ -1,13 +1,21 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { AuthServiceService } from '../../services/auth.service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GoogleAuthService } from '../../services/google-auth.service';
+import { debounceTime } from 'rxjs/operators';
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule, MatButtonModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -23,15 +31,30 @@ export class LoginComponent {
   ) {
     this.loginForm = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [Validators.required]),
+      password: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
     });
+
+    this.loginForm.controls['email'].valueChanges
+      .pipe(debounceTime(300))
+      .subscribe(() => {
+        this.updateEmailErrorMessage();
+      });
+
+    this.loginForm.controls['password'].valueChanges
+      .pipe(debounceTime(300))
+      .subscribe(() => {
+        this.updatePasswordErrorMessage();
+      });
   }
 
   updateEmailErrorMessage() {
     if (this.loginForm.controls['email'].hasError('required')) {
-      this.emailError = 'You must enter a value';
+      this.emailError = 'Você deve inserir um valor';
     } else if (this.loginForm.controls['email'].hasError('email')) {
-      this.emailError = 'Not a valid email';
+      this.emailError = 'Email inválido';
     } else {
       this.emailError = '';
     }
@@ -39,9 +62,9 @@ export class LoginComponent {
 
   updatePasswordErrorMessage() {
     if (this.loginForm.controls['password'].hasError('required')) {
-      this.passwordError = 'You must enter a value';
+      this.passwordError = 'Você deve inserir um valor';
     } else if (this.loginForm.controls['password'].hasError('minlength')) {
-      this.passwordError = 'Password must be at least 6 characters';
+      this.passwordError = 'A senha deve ter pelo menos 6 caracteres';
     } else {
       this.passwordError = '';
     }
@@ -50,15 +73,17 @@ export class LoginComponent {
   submitForm() {
     if (this.loginForm.valid) {
       const loggedIn = this.authService.loginUser(this.loginForm.value);
-      this.authService.loginUser(this.loginForm.value);
 
       if (!loggedIn) {
-        this.snackBar.open('Invalid email or password', 'Close', {
+        this.snackBar.open('Email ou senha inválidos', 'Fechar', {
           horizontalPosition: 'end',
           verticalPosition: 'top',
           duration: 2000,
         });
       }
+    } else {
+      this.updateEmailErrorMessage();
+      this.updatePasswordErrorMessage();
     }
   }
 

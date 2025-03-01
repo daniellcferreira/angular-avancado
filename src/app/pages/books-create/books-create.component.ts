@@ -2,15 +2,30 @@ import { Component } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { FormControl, FormGroup } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { IBook } from '../../interfaces/IBook.interface';
 import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+
 @Component({
   selector: 'app-books-create',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatDatepickerModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatButtonModule,
+  ],
   templateUrl: './books-create.component.html',
-  styleUrl: './books-create.component.css',
+  styleUrls: ['./books-create.component.css'],
 })
 export class BooksCreateComponent {
   booksList: IBook[] = [
@@ -19,7 +34,7 @@ export class BooksCreateComponent {
       catalog_id: 'A001',
       title: 'The Great Gatsby',
       author: 'F. Scott Fitzgerald',
-      description: 'A novel ste int the Jazz Age',
+      description: 'A novel set in the Jazz Age',
       publishedDate: new Date('1925-04-10'),
       imageLink:
         'https://m.media-amazon.com/images/I/61cnHV26bOL._AC_UL320_.jpg',
@@ -32,20 +47,25 @@ export class BooksCreateComponent {
 
   constructor(private router: Router) {
     this.bookForm = new FormGroup({
-      title: new FormControl('Titulo Padrão'),
-      author: new FormControl('Nome do Autor'),
-      description: new FormControl(),
-      published_date: new FormControl(),
-      price: new FormControl(),
-      totalInStock: new FormControl(),
+      title: new FormControl('Titulo Padrão', Validators.required),
+      author: new FormControl('Nome do Autor', Validators.required),
+      description: new FormControl('', Validators.required),
+      published_date: new FormControl('', Validators.required),
+      price: new FormControl('', [Validators.required, Validators.min(0)]),
+      totalInStock: new FormControl('', [
+        Validators.required,
+        Validators.min(0),
+      ]),
     });
   }
 
   submitForm() {
-    let bookData = this.bookForm.value;
-
-    this.booksList.push(bookData);
-
-    this.router.navigate(['books']);
+    if (this.bookForm.valid) {
+      let bookData = this.bookForm.value;
+      this.booksList.push(bookData);
+      this.router.navigate(['books']);
+    } else {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+    }
   }
 }

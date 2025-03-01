@@ -1,1 +1,64 @@
-<p>books-update works!</p>
+<h2>Atualizar Livro</h2>
+<form [formGroup]="bookForm" (ngSubmit)="submitForm()" class="book-form">
+  <mat-form-field appearance="fill" class="form-field">
+    <mat-label>Título</mat-label>
+    <input matInput formControlName="title" required />
+    <mat-error *ngIf="bookForm.get('title').hasError('required')">
+      O título é obrigatório
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="form-field">
+    <mat-label>Autor</mat-label>
+    <input matInput formControlName="author" required />
+    <mat-error *ngIf="bookForm.get('author').hasError('required')">
+      O autor é obrigatório
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="form-field">
+    <mat-label>Descrição</mat-label>
+    <textarea matInput formControlName="description"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="form-field">
+    <mat-label>Data de Publicação</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      formControlName="published_date"
+      required
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="bookForm.get('published_date').hasError('required')">
+      A data de publicação é obrigatória
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="form-field">
+    <mat-label>Preço</mat-label>
+    <input matInput type="number" formControlName="price" required />
+    <mat-error *ngIf="bookForm.get('price').hasError('required')">
+      O preço é obrigatório
+    </mat-error>
+    <mat-error *ngIf="bookForm.get('price').hasError('min')">
+      O preço deve ser maior ou igual a zero
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="form-field">
+    <mat-label>Total em Estoque</mat-label>
+    <input matInput type="number" formControlName="totalInStock" required />
+    <mat-error *ngIf="bookForm.get('totalInStock').hasError('required')">
+      O total em estoque é obrigatório
+    </mat-error>
+    <mat-error *ngIf="bookForm.get('totalInStock').hasError('min')">
+      O total em estoque deve ser maior ou igual a zero
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" class="submit-button">
+    Atualizar
+  </button>
+</form>
